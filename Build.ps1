@@ -53,11 +53,8 @@ Invoke-BuildStage -Name "Build" -Script {
         __FULLVERSION__ = $version.Full
     }
 
-    $artifactDir = $Env:BUILD_ARTIFACTSTAGINGDIRECTORY
-    if (![string]::IsNullOrEmpty($artifactDir))
-    {
-      Copy-Item ./source/Noveris.Build/* $Env:BUILD_ARTIFACTSTAGINGDIRECTORY -Force -Recurse
-    }
+    # Publish module
+    Publish-Module -Path ./source/Noveris.Build -NuGetApiKey $Env:NUGET_API_KEY
 
     Copy-Item ./source/Noveris.Build/* ./stage/ -Force -Recurse
 

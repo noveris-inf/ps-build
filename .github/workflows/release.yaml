@@ -11,3 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Publish
+        shell: pwsh
+        run: |
+          ./Build.ps1
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
