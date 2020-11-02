@@ -23,6 +23,7 @@ $projectName = "noveris.build"
 ########
 # Capture version information
 $version = Get-BuildVersionInfo -Sources @(
+    $Env:GITHUB_REF,
     $Env:BUILD_SOURCEBRANCH,
     $Env:CI_COMMIT_TAG,
     $Env:BUILD_VERSION,
