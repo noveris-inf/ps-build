@@ -277,7 +277,7 @@ Function Format-TemplateFile
 #>
 Function Format-TemplateString
 {
-    [OutputType('string')]
+    [OutputType('System.String')]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true,ValueFromPipeline)]
