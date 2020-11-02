@@ -1,24 +1,20 @@
 <#
 #>
 
-################
+########
 # Global settings
 $InformationPreference = "Continue"
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2
 
-################
+########
 # Script variables
 $semVerPattern = "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
-$script:BuildState = [PSCustomObject]@{
-    Stages = @{}
-    RunState = @{}
-}
-
-$script:BuildArtifacts = New-Object 'System.Collections.Generic.HashSet[string]'
 $script:BuildDirectories = New-Object 'System.Collections.Generic.HashSet[string]'
 
+<#
+#>
 Function Use-EnvVar
 {
     [CmdletBinding()]
@@ -281,6 +277,7 @@ Function Format-TemplateFile
 #>
 Function Format-TemplateString
 {
+    [OutputType('string')]
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true,ValueFromPipeline)]

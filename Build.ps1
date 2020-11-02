@@ -32,17 +32,17 @@ $version = Get-BuildVersionInfo -Sources @(
 ########
 # Set up build directory
 Use-BuildDirectories @(
-	"package",
-	"stage"
+    "package",
+    "stage"
 )
 
 ########
 # Build stage
 Invoke-BuildStage -Name "Build" -Script {
 
-	Write-Information "Updating version information"
-	Write-Information ("Setting BUILD_VERSION: " + $version.Full)
-	Write-Information ("##vso[task.setvariable variable=BUILD_VERSION;]" + $version.Full)
+    Write-Information "Updating version information"
+    Write-Information ("Setting BUILD_VERSION: " + $version.Full)
+    Write-Information ("##vso[task.setvariable variable=BUILD_VERSION;]" + $version.Full)
 
     # Clear build directories
     Clear-BuildDirectories
@@ -53,11 +53,10 @@ Invoke-BuildStage -Name "Build" -Script {
         __FULLVERSION__ = $version.Full
     }
 
-    
-	$artifactDir = $Env:BUILD_ARTIFACTSTAGINGDIRECTORY
-	if (![string]::IsNullOrEmpty($artifactDir))
-	{
-        Copy-Item ./source/Noveris.Build/* $Env:BUILD_ARTIFACTSTAGINGDIRECTORY -Force -Recurse
+    $artifactDir = $Env:BUILD_ARTIFACTSTAGINGDIRECTORY
+    if (![string]::IsNullOrEmpty($artifactDir))
+    {
+      Copy-Item ./source/Noveris.Build/* $Env:BUILD_ARTIFACTSTAGINGDIRECTORY -Force -Recurse
     }
 
     Copy-Item ./source/Noveris.Build/* ./stage/ -Force -Recurse
