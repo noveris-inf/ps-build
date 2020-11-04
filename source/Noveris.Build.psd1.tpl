@@ -70,20 +70,18 @@
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
-        'Set-BuildVersionInfo',
-        'Set-BuildStage',
-        'Remove-BuildStage',
-        'Invoke-BuildStages',
+        'Use-EnvVar',
+        'Get-BuildVersionInfo',
+        'Assert-SuccessExitCode',
+        'Invoke-BuildStage',
         'Format-TemplateFile',
         'Format-TemplateString',
-        'Publish-ArtifactFile',
-        'Use-BuildVar',
         'Get-BuildNumber',
-        'Invoke-BuildProcess',
+        'Use-BuildDirectories',
         'Use-BuildDirectory',
         'Clear-BuildDirectory',
-        'Add-BuildArtifact',
-        'Get-BuildArtifacts'
+        'Clear-BuildDirectories',
+        'Get-BuildDirectories
     )
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -117,10 +115,10 @@
             )
     
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri = 'https://github.com/noveris-inf/ps-build/blob/main/LICENSE'
     
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri = 'https://github.com/noveris-inf/ps-build'
     
             # A URL to an icon representing this module.
             # IconUri = ''
