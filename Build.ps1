@@ -3,6 +3,12 @@
 
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string[]]$Stages,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$UseLocalBuild = $false
 )
 
 ########
@@ -14,11 +20,14 @@ Set-StrictMode -Version 2
 ########
 # Modules
 Remove-Module Noveris.Build -EA SilentlyContinue
-Import-Module ./source/Noveris.Build
-
-########
-# Project settings
-$projectName = "noveris.build"
+if ($UseLocalBuild)
+{
+    Import-Module ./source/Noveris.Build
+} else {
+    $module = Find-Module Noveris.Build -MaximumVersion 0.4.9999
+    Install-Module -Scope CurrentUser -Name $module.Name -RequiredVersion $module.Version -Confirm:$false -SkipPublisherCheck
+    Import-Module -Name $module.Name -RequiredVersion $module.Version
+}
 
 ########
 # Capture version information
@@ -31,38 +40,16 @@ $version = Get-BuildVersionInfo -Sources @(
 )
 
 ########
-# Set up build directory
-Use-BuildDirectories @(
-    "package",
-    "stage"
-)
-
-########
 # Build stage
-Invoke-BuildStage -Name "Build" -Script {
-
-    Write-Information "Updating version information"
-    Write-Information ("Setting BUILD_VERSION: " + $version.Full)
-    Write-Information ("##vso[task.setvariable variable=BUILD_VERSION;]" + $version.Full)
-
-    # Clear build directories
-    Clear-BuildDirectories
-
+Invoke-BuildStage -Name "Build" -Filters $Stages -Script {
     # Template PowerShell module definition
     Write-Information "Templating Noveris.Build.psd1"
     Format-TemplateFile -Template source/Noveris.Build.psd1.tpl -Target source/Noveris.Build/Noveris.Build.psd1 -Content @{
         __FULLVERSION__ = $version.Full
     }
+}
 
+Invoke-BuildStage -Name "Publish" -Filters $Stages -Script {
     # Publish module
     Publish-Module -Path ./source/Noveris.Build -NuGetApiKey $Env:NUGET_API_KEY
-
-    Copy-Item ./source/Noveris.Build/* ./stage/ -Force -Recurse
-
-    Write-Information "Packaging artifacts"
-    $version = $version.Full
-    $artifactName = "package/${projectName}-${version}.zip"
-    Write-Information "Target file: ${artifactName}"
-
-    Compress-Archive -Destination $artifactName -Path "./stage/*" -Force
 }

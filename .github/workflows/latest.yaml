@@ -18,3 +18,8 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish
+        shell: pwsh
+        run: |
+          ./Build.ps1 -Stages Build

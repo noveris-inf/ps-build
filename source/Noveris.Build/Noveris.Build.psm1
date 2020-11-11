@@ -173,11 +173,21 @@ Function Invoke-BuildStage
 
         [Parameter(mandatory=$true)]
         [ValidateNotNull()]
-        [ScriptBlock]$Script
+        [ScriptBlock]$Script,
+
+        [Parameter(mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$Filters
     )
 
     process
     {
+        if ($PSBoundParameters.Keys -contains "Filters" -and  ($Filters | ForEach-Object { $Name -eq $_ }) -notcontains $true)
+        {
+            # Filters have been supplied and our build stage name doesn't match
+            return
+        }
+
 		try {
             Write-Information ""
             Write-Information ("================ BEGIN ({0}) Stage: $Name" -f [DateTime]::Now.ToString("yyyyMMdd HHmm"))

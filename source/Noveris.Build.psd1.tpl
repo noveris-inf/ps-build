@@ -23,10 +23,10 @@
     CompanyName = 'Noveris Pty Ltd'
     
     # Copyright statement for this module
-    Copyright = '(c) 2019 Noveris Pty Ltd. All rights reserved.'
+    Copyright = '(c) 2020 Noveris Pty Ltd. All rights reserved.'
     
     # Description of the functionality provided by this module
-    Description = 'Build system'
+    Description = 'Build assistant module'
     
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '5.1'
@@ -111,7 +111,8 @@
     
             # Tags applied to this module. These help with module discovery in online galleries.
             Tags = @(
-                'Build'
+                'Build',
+                'Integration'
             )
     
             # A URL to the license for this module.
