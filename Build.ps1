@@ -19,12 +19,12 @@ Set-StrictMode -Version 2
 
 ########
 # Modules
-Remove-Module Noveris.Build -EA SilentlyContinue
+Remove-Module noveris.build -EA SilentlyContinue
 if ($UseLocalBuild)
 {
-    Import-Module ./source/Noveris.Build
+    Import-Module ./source/noveris.build/noveris.build.psm1
 } else {
-    $module = Find-Module Noveris.Build -MaximumVersion 0.4.9999
+    $module = Find-Module noveris.build -MaximumVersion 0.4.9999
     Install-Module -Scope CurrentUser -Name $module.Name -RequiredVersion $module.Version -Confirm:$false -SkipPublisherCheck
     Import-Module -Name $module.Name -RequiredVersion $module.Version
 }
@@ -43,13 +43,13 @@ $version = Get-BuildVersionInfo -Sources @(
 # Build stage
 Invoke-BuildStage -Name "Build" -Filters $Stages -Script {
     # Template PowerShell module definition
-    Write-Information "Templating Noveris.Build.psd1"
-    Format-TemplateFile -Template source/Noveris.Build.psd1.tpl -Target source/Noveris.Build/Noveris.Build.psd1 -Content @{
+    Write-Information "Templating noveris.build.psd1"
+    Format-TemplateFile -Template source/noveris.build.psd1.tpl -Target source/noveris.build/noveris.build.psd1 -Content @{
         __FULLVERSION__ = $version.Full
     }
 }
 
 Invoke-BuildStage -Name "Publish" -Filters $Stages -Script {
     # Publish module
-    Publish-Module -Path ./source/Noveris.Build -NuGetApiKey $Env:NUGET_API_KEY
+    Publish-Module -Path ./source/noveris.build -NuGetApiKey $Env:NUGET_API_KEY
 }

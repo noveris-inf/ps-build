@@ -22,4 +22,4 @@ jobs:
       - name: Publish
         shell: pwsh
         run: |
-          ./Build.ps1 -Stages Build
+          ./Build.ps1 -Stages Build -UseLocalBuild
