@@ -19,14 +19,15 @@ Set-StrictMode -Version 2
 
 ########
 # Modules
+Remove-Module Noveris.ModuleMgmt -EA SilentlyContinue
+Import-Module ./Noveris.ModuleMgmt/source/Noveris.ModuleMgmt/Noveris.ModuleMgmt.psm1
+
 Remove-Module noveris.build -EA SilentlyContinue
 if ($UseLocalBuild)
 {
     Import-Module ./source/noveris.build/noveris.build.psm1
 } else {
-    $module = Find-Module noveris.build -MaximumVersion 0.4.9999
-    Install-Module -Scope CurrentUser -Name $module.Name -RequiredVersion $module.Version -Confirm:$false -SkipPublisherCheck
-    Import-Module -Name $module.Name -RequiredVersion $module.Version
+    Import-Module -Name noveris.build -RequiredVersion (Install-PSModuleWithSpec -Name noveris.build -Major 0 -Minor 4)
 }
 
 ########
