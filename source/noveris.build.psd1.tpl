@@ -1,8 +1,8 @@
-# Module manifest for Noveris.Build
+# Module manifest for noveris.build
 
 @{
     # Script module or binary module file associated with this manifest.
-    RootModule = 'Noveris.Build.psm1'
+    RootModule = 'noveris.build.psm1'
     
     # Version number of this module.
     ModuleVersion = '__FULLVERSION__'
@@ -65,7 +65,7 @@
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     NestedModules = @(
-        'Noveris.Build.psm1'
+        'noveris.build.psm1'
     )
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -98,7 +98,7 @@
     
     # List of all modules packaged with this module
     #ModuleList = @(
-    #    'Noveris.Build.psm1'
+    #    'noveris.build.psm1'
     #)
     
     # List of all files packaged with this module
