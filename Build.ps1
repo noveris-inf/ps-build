@@ -49,9 +49,9 @@ Invoke-BuildStage -Name "Build" -Filters $Stages -Script {
         __FULLVERSION__ = $version.Full
     }
 
-    # Copy modulemgmt to release tools to include in module
-    Write-Information "Copy ModuleMgmt to source directory"
-    Copy-Item ./Noveris.ModuleMgmt/source/Noveris.ModuleMgmt/Noveris.ModuleMgmt.psm1 ./source/noveris.build/
+    # Test the module manifest
+    Write-Information "Testing module manifest"
+    Test-ModuleManifest source/noveris.build/noveris.build.psd1
 }
 
 Invoke-BuildStage -Name "Publish" -Filters $Stages -Script {
