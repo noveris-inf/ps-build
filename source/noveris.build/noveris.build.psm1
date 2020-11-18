@@ -234,7 +234,10 @@ Function Format-TemplateFile
         [string]$Target,
 
         [Parameter(Mandatory=$true)]
-        [Hashtable]$Content
+        [Hashtable]$Content,
+
+        [Parameter(Mandatory=$false)]
+        [switch]$Stream = $false
     )
 
     process
@@ -244,7 +247,13 @@ Function Format-TemplateFile
             New-Item -ItemType Directory -Path $dirPath -EA Ignore
         }
 
-        Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content | Out-File -Encoding UTF8 $Target
+        if (!$Stream)
+        {
+            $content = Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content
+            $content | Out-File -Encoding UTF8 $Target
+        } else {
+            $content = Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content | Out-File -Encoding UTF8 $Target
+        }
     }
 }
 
