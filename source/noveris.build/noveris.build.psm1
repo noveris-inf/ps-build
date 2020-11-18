@@ -9,7 +9,6 @@ Set-StrictMode -Version 2
 
 Import-Module ([System.IO.Path]::Combine($PSScriptRoot, "Noveris.ModuleMgmt.psm1"))
 
-
 Remove-Module Noveris.Logger -EA SilentlyContinue
 Import-Module -Name Noveris.Logger -RequiredVersion (Install-PSModuleWithSpec -Name Noveris.Logger -Major 0 -Minor 6)
 
