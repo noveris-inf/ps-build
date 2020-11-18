@@ -334,3 +334,5 @@ source/Noveris.Build/Noveris.Build.psd1
 package/
 
 stage/
+
+source/noveris.build/Noveris.ModuleMgmt.psm1

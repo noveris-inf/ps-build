@@ -48,6 +48,10 @@ Invoke-BuildStage -Name "Build" -Filters $Stages -Script {
     Format-TemplateFile -Template source/noveris.build.psd1.tpl -Target source/noveris.build/noveris.build.psd1 -Content @{
         __FULLVERSION__ = $version.Full
     }
+
+    # Copy modulemgmt to release tools to include in module
+    Write-Information "Copy ModuleMgmt to source directory"
+    Copy-Item ./Noveris.ModuleMgmt/source/Noveris.ModuleMgmt/Noveris.ModuleMgmt.psm1 ./source/noveris.build/
 }
 
 Invoke-BuildStage -Name "Publish" -Filters $Stages -Script {

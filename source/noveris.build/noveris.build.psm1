@@ -7,6 +7,12 @@ $InformationPreference = "Continue"
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2
 
+Import-Module ([System.IO.Path]::Combine($PSScriptRoot, "Noveris.ModuleMgmt.psm1"))
+
+
+Remove-Module Noveris.Logger -EA SilentlyContinue
+Import-Module -Name Noveris.Logger -RequiredVersion (Install-PSModuleWithSpec -Name Noveris.Logger -Major 0 -Minor 6)
+
 ########
 # Script variables
 $semVerPattern = "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
@@ -194,45 +200,8 @@ Function Invoke-BuildStage
             Write-Information ""
 
             & $Script *>&1 |
-                ForEach-Object {
-                    $timestamp = [DateTime]::Now.ToString("yyyyMMdd:HHmm")
-
-                    if ([System.Management.Automation.InformationRecord].IsAssignableFrom($_.GetType()))
-                    {
-                        ("{0} (INFO): {1}" -f $timestamp, $_.ToString())
-                    }
-                    elseif ([System.Management.Automation.VerboseRecord].IsAssignableFrom($_.GetType()))
-                    {
-                        ("{0} (VERBOSE): {1}" -f $timestamp, $_.ToString())
-                    }
-                    elseif ([System.Management.Automation.ErrorRecord].IsAssignableFrom($_.GetType()))
-                    {
-                        $errors++
-                        ("{0} (ERROR): {1}" -f $timestamp, $_.ToString())
-                        $_ | Out-String -Stream | ForEach-Object {
-                            ("{0} (ERROR): {1}" -f $timestamp, $_.ToString())
-                        }
-                    }
-                    elseif ([System.Management.Automation.DebugRecord].IsAssignableFrom($_.GetType()))
-                    {
-                        ("{0} (DEBUG): {1}" -f $timestamp, $_.ToString())
-                    }
-                    elseif ([System.Management.Automation.WarningRecord].IsAssignableFrom($_.GetType()))
-                    {
-                        $warnings++
-                        ("{0} (WARNING): {1}" -f $timestamp, $_.ToString())
-                    }
-                    elseif ([string].IsAssignableFrom($_.GetType()))
-                    {
-                        ("{0} (INFO): {1}" -f $timestamp, $_.ToString())
-                    }
-                    else
-                    {
-                        # Don't do ToString() here as this breaks things like Format-Table that
-                        # don't convert to string properly. Out-String (below) will handle this for us.
-                        $_
-                    }
-                } | Out-String -Stream
+                Format-RecordAsString -DisplaySummary |
+                Out-String -Stream
             Write-Information ("================ END ({0}) Stage: $_" -f [DateTime]::Now.ToString("yyyyMMdd HHmm"))
 		} catch {
 			$ex = $_
