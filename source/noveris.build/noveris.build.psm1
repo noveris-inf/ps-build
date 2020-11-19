@@ -249,10 +249,10 @@ Function Format-TemplateFile
 
         if (!$Stream)
         {
-            $content = Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content
-            $content | Out-File -Encoding UTF8 $Target
+            $data = Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content
+            $data | Out-File -Encoding UTF8 $Target
         } else {
-            $content = Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content | Out-File -Encoding UTF8 $Target
+            Get-Content $Template -Encoding UTF8 | Format-TemplateString -Content $Content | Out-File -Encoding UTF8 $Target
         }
     }
 }
