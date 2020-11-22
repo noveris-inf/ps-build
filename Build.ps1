@@ -27,18 +27,18 @@ if ($UseLocalBuild)
 {
     Import-Module ./source/noveris.build/noveris.build.psm1
 } else {
-    Import-Module -Name noveris.build -RequiredVersion (Install-PSModuleWithSpec -Name noveris.build -Major 0 -Minor 4)
+    Import-Module -Name noveris.build -RequiredVersion (Install-PSModuleWithSpec -Name noveris.build -Major 0 -Minor 5)
 }
 
 ########
 # Capture version information
-$version = Get-BuildVersionInfo -Sources @(
+$version = @(
     $Env:GITHUB_REF,
     $Env:BUILD_SOURCEBRANCH,
     $Env:CI_COMMIT_TAG,
     $Env:BUILD_VERSION,
     "v0.1.0"
-)
+) | Select-ValidVersions -First -Required
 
 ########
 # Build stage
