@@ -2,6 +2,7 @@
 #>
 
 #Requires -Modules @{"ModuleName"="Noveris.Logger";"RequiredVersion"="0.6.1"}
+#Requires -Modules @{"ModuleName"="Noveris.Version";"RequiredVersion"="0.5.0"}
 
 ########
 # Global settings
