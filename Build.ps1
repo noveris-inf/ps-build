@@ -40,13 +40,16 @@ $version = @(
     "v0.1.0"
 ) | Select-ValidVersions -First -Required
 
+Write-Information "Version:"
+$version
+
 ########
 # Build stage
 Invoke-BuildStage -Name "Build" -Filters $Stages -Script {
     # Template PowerShell module definition
     Write-Information "Templating noveris.build.psd1"
     Format-TemplateFile -Template source/noveris.build.psd1.tpl -Target source/noveris.build/noveris.build.psd1 -Content @{
-        __FULLVERSION__ = $version.Full
+        __FULLVERSION__ = $version.PlainVersion
     }
 
     # Trust powershell gallery
