@@ -12,8 +12,6 @@ Set-StrictMode -Version 2
 
 ########
 # Script variables
-$semVerPattern = "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
-
 $script:BuildDirectories = New-Object 'System.Collections.Generic.HashSet[string]'
 
 <#
@@ -58,85 +56,6 @@ Function Use-EnvVar
         }
 
         $val
-    }
-}
-
-<#
-#>
-Function Get-BuildVersionInfo
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(mandatory=$true)]
-        [ValidateNotNull()]
-        [AllowEmptyString()]
-        [string[]]$Sources
-    )
-
-    process
-    {
-        foreach ($src in $Sources)
-        {
-            if ($null -eq $src -or $src -eq "")
-            {
-                continue
-            }
-
-            Write-Verbose "Processing version candidate: ${src}"
-
-            # Strip any refs/tags/ reference at the beginning of the version source
-            $tagBranch = "refs/tags/"
-            if ($src.StartsWith($tagBranch))
-            {
-                Write-Verbose "Version starts with refs/tags format - Removing"
-                $src = $src.Substring($tagBranch.Length)
-            }
-
-            if ($src.StartsWith("v"))
-            {
-                Write-Verbose "Version starts with 'v' - Removing"
-                $src = $src.Substring(1)
-            }
-
-            if ($src -notmatch $semVerPattern)
-            {
-                Write-Verbose "Version string not in correct format. skipping"
-                continue
-            }
-
-            $Prerelease = $Matches[4]
-            if ($null -eq $Prerelease) {
-                $Prerelease = ""
-            }
-
-            $Buildmetadata = $Matches[5]
-            if ($null -eq $Buildmetadata) {
-                $Buildmetadata = ""
-            }
-
-            $major = [Convert]::ToInt32($Matches[1])
-            $minor = [Convert]::ToInt32($Matches[2])
-            $patch = [Convert]::ToInt32($Matches[3])
-            $plain = "${major}.${minor}.${patch}"
-
-            Write-Verbose "Version is valid"
-            [PSCustomObject]@{
-                Full = $src
-                Major = $major
-                Minor = $minor
-                Patch = $patch
-                Prerelease = $Prerelease
-                Buildmetadata = $Buildmetadata
-                PlainVersion = $plain
-                BuildVersion = ("{0}.{1}" -f $plain, (Get-BuildNumber))
-                AssemblyVersion = "${major}.0.0.0"
-            }
-
-            return
-        }
-
-        # throw error as we didn't find a valid version source
-        Write-Error "Could not find a valid version source"
     }
 }
 
@@ -280,21 +199,6 @@ Function Format-TemplateString
         $Content.Keys | ForEach-Object { $working = $working.Replace($_, $Content[$_]) }
 
         $working
-    }
-}
-
-<#
-#>
-Function Get-BuildNumber {
-    [OutputType('System.Int64')]
-    [CmdletBinding()]
-    param(
-    )
-
-    process
-    {
-        $MinDate = New-Object DateTime -ArgumentList 1970, 1, 1
-        [Int64]([DateTime]::Now - $MinDate).TotalDays
     }
 }
 
