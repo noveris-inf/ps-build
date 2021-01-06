@@ -51,7 +51,7 @@ Function Use-EnvVar
             $ret = $val | ForEach-Object -Process $Check
             if (!$ret)
             {
-                Write-Error "Source string (${Source}) failed validation"
+                Write-Error "Source string (${Name}) failed validation"
                 return
             }
         }
