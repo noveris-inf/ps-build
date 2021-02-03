@@ -49,7 +49,7 @@
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules = @(
         @{"ModuleName"="Noveris.Logger";"RequiredVersion"="0.6.1"},
-        @{"ModuleName"="Noveris.Version";"RequiredVersion"="0.5.0"},
+        @{"ModuleName"="Noveris.Version";"RequiredVersion"="0.5.1"},
         @{"ModuleName"="Noveris.GitHubApi";"RequiredVersion"="0.1.2"}
     )
 
